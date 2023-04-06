@@ -9,6 +9,7 @@
     min-height: 400px;
     border: 2px solid black;
     margin: auto;
+    background-color: rgb(42, 42, 112);
 }
 
 .playerSelect {
@@ -16,7 +17,7 @@
     width: 65%;
     justify-content: space-evenly;
     background-color: grey;
-    margin: 10px;
+    margin-bottom: 20px;
 }
 
 .gameBoard {
@@ -25,25 +26,34 @@
     height:75%;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
+    box-shadow: 0px 0px 15px darkgrey;
+    background-color: goldenrod;
 }
 
 .gameBtn {
-    border: 3px solid darkblue;
-    background-color: white;
+    background-color: rgb(64, 88, 88);
+    border: none;
+    font-size: 4.5rem;
+    font-weight: 700;
+    color: rgb(152, 9, 9);
 }
 
 .top {
-    border-top: none;
+    margin-bottom: 5px;
 }
 
 .bottom {
-    border-bottom: none;
+    margin-top: 5px;
 }
 
 .right {
-    border-right: none;
+    margin-left: 5px;
 }
 
 .left {
-    border-left: none;
+    margin-right: 5px;
+}
+
+.gameBtn:hover {
+    cursor: pointer;
 }
