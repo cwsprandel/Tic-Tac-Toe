@@ -1,14 +1,16 @@
 const Gameboard = (() => {
-    const gameboard = ["X", "", "", "O", "X", "", "", "O", ""];
+    const gameboard = ["", "", "", "", "", "", "", "", ""];
 
-    const gameArea = document.getElementById("gameArea");
+    const playArea = document.getElementById("playArea");
 
     const render = () => {
-        const playArea = document.createElement("div");
-        playArea.setAttribute("class", "gameBoard");
-        playArea.setAttribute("id", "gameBoard");
+        playArea.innerHTML = "";
 
-        gameArea.appendChild(playArea);
+        const gameboardArea = document.createElement("div");
+        gameboardArea.setAttribute("class", "gameBoard");
+        gameboardArea.setAttribute("id", "gameBoard");
+
+        playArea.appendChild(gameboardArea);
 
         gameboard.forEach((emblem, index) => {
             //add the emblems to the board using the emblem
@@ -16,14 +18,20 @@ const Gameboard = (() => {
             gamePosition.setAttribute("class","gameBtn");
             gamePosition.setAttribute("id", index)
             gamePosition.textContent = emblem;
-            gamePosition.onclick = Game.markPosition
+            gamePosition.onclick = Game.positionSelected;
 
-            playArea.appendChild(gamePosition);
+            gameboardArea.appendChild(gamePosition);
         });
     }
 
+    const updateBoard = (index, emblem) => {
+        gameboard[index] = emblem;
+        render();
+    }
+
     return {
-        render
+        render,
+        updateBoard
     }
 })();
 
@@ -38,6 +46,7 @@ const Game = (() => {
     let players = [];
     let currentPlayerIndex;
     let gameOver;
+    let gameStarted;
 
     let playerOneName = document.getElementById("player1").value;
     let playerTwoName = document.getElementById("player2").value;
@@ -55,10 +64,25 @@ const Game = (() => {
         }
         gameOver = false;
 
-        Gameboard.render();
+        if (gameStarted != true) {
+            Gameboard.render();
+        }
+        else {
+            alert("there is already a game in progress");
+        }
+
+        gameStarted = true;
     }
+
+    const positionSelected = (event) => {
+        let position = event.target.id;
+        Gameboard.updateBoard(position, players[currentPlayerIndex].emblem);
+        currentPlayerIndex = currentPlayerIndex === 0 ? 1:0;
+    }
+
     return {
-        startGame
+        startGame,
+        positionSelected
     }
 })();
 
