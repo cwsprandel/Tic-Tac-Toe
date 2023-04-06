@@ -24,14 +24,23 @@ const Gameboard = (() => {
         });
     }
 
+    const gameboardReset = () => {
+        playArea.innerHTML = "";
+        gameboard = ["", "", "", "", "", "", "", "", ""];
+    }
+
     const updateBoard = (index, emblem) => {
         gameboard[index] = emblem;
         render();
     }
 
+    let viewGameboard = gameboard;
+
     return {
         render,
-        updateBoard
+        updateBoard,
+        viewGameboard,
+        gameboardReset
     }
 })();
 
@@ -48,8 +57,10 @@ const Game = (() => {
     let gameOver;
     let gameStarted;
 
-    let playerOneName = document.getElementById("player1").value;
-    let playerTwoName = document.getElementById("player2").value;
+    const playerOne = document.getElementById("player1")
+    let playerOneName = playerOne.value;
+    const playerTwo = document.getElementById("player2")
+    let playerTwoName = playerTwo.value;
 
     const startGame = () => {
         players = [
@@ -74,15 +85,28 @@ const Game = (() => {
         gameStarted = true;
     }
 
+    const resetGame = () => {
+        playerOne.value = "";
+        playerTwo.value = "";
+        players = [];
+        Gameboard.gameboardReset();
+    }
+
     const positionSelected = (event) => {
         let position = event.target.id;
+
+        if (Gameboard.viewGameboard[position] !== "") {
+            return;
+        }
+
         Gameboard.updateBoard(position, players[currentPlayerIndex].emblem);
         currentPlayerIndex = currentPlayerIndex === 0 ? 1:0;
     }
 
     return {
         startGame,
-        positionSelected
+        positionSelected,
+        resetGame
     }
 })();
 
@@ -91,12 +115,8 @@ startButton.addEventListener("click", () => {
     Game.startGame();
 })
 
-//determine which player is going first (whoever selects X)
-//pass emblem into changeStatus parameter 
-//change to new player and emblem
-
-function changeStatus(id) {
-    let emblem = "O";
-    document.getElementById(id).textContent = emblem;
-}
+const resetButton = document.getElementById("gameReset")
+resetButton.addEventListener("click", () => {
+    Game.resetGame();
+})
 
