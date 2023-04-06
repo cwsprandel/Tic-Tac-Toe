@@ -25,5 +25,25 @@
     height:75%;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    background-color: darkred;
+}
+
+.gameBtn {
+    border: 3px solid darkblue;
+    background-color: white;
+}
+
+.top {
+    border-top: none;
+}
+
+.bottom {
+    border-bottom: none;
+}
+
+.right {
+    border-right: none;
+}
+
+.left {
+    border-left: none;
 }
