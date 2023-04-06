@@ -1,16 +1,24 @@
 const Gameboard = (() => {
-    const gameboard = ["", "", "", "", "", "", "", "", ""];
+    const gameboard = ["X", "", "", "O", "X", "", "", "O", ""];
 
-    const gameArea = document.getElementById("gameBoard");
+    const gameArea = document.getElementById("gameArea");
 
     const render = () => {
-        gameboard.forEach((emblem, index) => {
-            //add the emblems to the board using the emblem 
-            //use the index to place the emlbem in the correct position
-            const gamePosition = document.createElement("button");
-            gamePosition.setAttribute("class","gameBtn");
+        const playArea = document.createElement("div");
+        playArea.setAttribute("class", "gameBoard");
+        playArea.setAttribute("id", "gameBoard");
 
-            gameArea.appendChild(gamePosition);
+        gameArea.appendChild(playArea);
+
+        gameboard.forEach((emblem, index) => {
+            //add the emblems to the board using the emblem
+            const gamePosition = document.createElement("div");
+            gamePosition.setAttribute("class","gameBtn");
+            gamePosition.setAttribute("id", index)
+            gamePosition.textContent = emblem;
+            gamePosition.onclick = Game.markPosition
+
+            playArea.appendChild(gamePosition);
         });
     }
 
