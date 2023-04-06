@@ -1,5 +1,5 @@
 const Gameboard = (() => {
-    const gameboard = ["", "", "", "", "", "", "", "", ""];
+    let gameboard = ["", "", "", "", "", "", "", "", ""];
 
     const playArea = document.getElementById("playArea");
 
@@ -57,12 +57,20 @@ const Game = (() => {
     let gameOver;
     let gameStarted;
 
-    const playerOne = document.getElementById("player1")
-    let playerOneName = playerOne.value;
-    const playerTwo = document.getElementById("player2")
-    let playerTwoName = playerTwo.value;
+    const playerOne = document.getElementById("playerOne");
+    let playerOneName = document.getElementById("playerOne").value;
+    const playerTwo = document.getElementById("playerTwo");
+    let playerTwoName = document.getElementById("playerTwo").value;
 
     const startGame = () => {
+        console.log(playerOne.value);
+        console.log(playerOneName);
+
+        if (playerOne.value === "" || playerTwo.value === "") {
+            alert("please enter player names");
+            return;
+        }
+
         players = [
             playerFactory(playerOneName, "X"),
             playerFactory(playerTwoName, "O")
@@ -89,6 +97,7 @@ const Game = (() => {
         playerOne.value = "";
         playerTwo.value = "";
         players = [];
+        gameStarted = false;
         Gameboard.gameboardReset();
     }
 
