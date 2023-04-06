@@ -1,3 +1,7 @@
+const gameBoard = (() => {
+    
+})
+
 let gameSpaces = [];
 
 //determine which player is going first (whoever selects X)
