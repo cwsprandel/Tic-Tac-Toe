@@ -13,7 +13,6 @@ const Gameboard = (() => {
         playArea.appendChild(gameboardArea);
 
         gameboard.forEach((emblem, index) => {
-            //add the emblems to the board using the emblem
             const gamePosition = document.createElement("div");
             gamePosition.setAttribute("class","gameBtn");
             gamePosition.setAttribute("id", index)
@@ -24,13 +23,23 @@ const Gameboard = (() => {
         });
     }
 
-    const gameWinScreen = () => {
-        
+    const gameOverScreen = (winner) => {
+        const overlay = document.getElementById("overlay");
+        overlay.style.display = "block";
+        overlay.onclick = () => {
+            overlay.style.display = "none";
+        }
+
+        const overlayText = document.getElementById("overlayText");
+        if (winner) {
+            overlayText.textContent = `${winner} wins the game!`
+        } else {
+            overlayText.textContent = "It's a draw..."
+        }
     }
 
     const gameboardReset = () => {
         playArea.innerHTML = "";
-        gameboard = ["", "", "", "", "", "", "", "", ""];
     }
 
     const updateBoard = (index, emblem) => {
@@ -44,7 +53,8 @@ const Gameboard = (() => {
         render,
         updateBoard,
         viewGameboard,
-        gameboardReset
+        gameboardReset,
+        gameOverScreen
     }
 })();
 
@@ -58,13 +68,13 @@ const playerFactory = (name, emblem) => {
 const Game = (() => {
     let players = [];
     let currentPlayerIndex;
-    let gameOver;
+    let clickCount = 0;
     let gameStarted;
+    let gameOver = false;
+    let winner = "";
 
     const playerOne = document.getElementById("playerOne");
-    let playerOneName = document.getElementById("playerOne").value;
     const playerTwo = document.getElementById("playerTwo");
-    let playerTwoName = document.getElementById("playerTwo").value;
 
     const startGame = () => {
 
@@ -74,8 +84,8 @@ const Game = (() => {
         }
 
         players = [
-            playerFactory(playerOneName, "X"),
-            playerFactory(playerTwoName, "O")
+            playerFactory(playerOne.value, "X"),
+            playerFactory(playerTwo.value, "O")
         ]
 
         if (players[0].emblem == "X") {
@@ -83,6 +93,7 @@ const Game = (() => {
         } else {
             currentPlayerIndex = 1;
         }
+
         gameOver = false;
 
         if (gameStarted != true) {
@@ -96,14 +107,23 @@ const Game = (() => {
     }
 
     const resetGame = () => {
-        playerOne.value = "";
-        playerTwo.value = "";
-        players = [];
         gameStarted = false;
-        Gameboard.gameboardReset();
+        gameOver = false;
+        clickCount = 0;
+        currentPlayerIndex = 0;
+        winner = "";
+        for (let i=0; i<9; i++) {
+            Gameboard.updateBoard(i,"");
+        }
+        Gameboard.gameboardReset
     }
 
     const positionSelected = (event) => {
+
+        if (gameOver) {
+            return;
+        }
+
         let position = event.target.id;
 
         if (Gameboard.viewGameboard[position] !== "") {
@@ -111,21 +131,24 @@ const Game = (() => {
         }
 
         Gameboard.updateBoard(position, players[currentPlayerIndex].emblem);
-
-        // if (checkBoard(Gameboard.viewGameboard, players[currentPlayerIndex].emblem)) {
-        //     gameOver = true;
-        //     alert(`${players[currentPlayerIndex].name}` + " Wins!");
-        // }
+        clickCount++
 
         if (checkBoard(Gameboard.viewGameboard)){
+            winner = players[currentPlayerIndex].name;
             gameOver = true;
-            alert("winner winner chicken dinner")
+        } else if (clickCount === 9) {
+            gameOver = true;
+        }
+
+        if (gameOver) {
+            Gameboard.gameOverScreen(winner);
         }
 
         currentPlayerIndex = currentPlayerIndex === 0 ? 1:0;
     }
 
-    const checkBoard = (board) => {
+    let checkBoard = (board) => {
+        console.log(board);
         const winningCombos = [
             [0,1,2],
             [3,4,5],
