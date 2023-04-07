@@ -24,6 +24,10 @@ const Gameboard = (() => {
         });
     }
 
+    const gameWinScreen = () => {
+        
+    }
+
     const gameboardReset = () => {
         playArea.innerHTML = "";
         gameboard = ["", "", "", "", "", "", "", "", ""];
@@ -63,8 +67,6 @@ const Game = (() => {
     let playerTwoName = document.getElementById("playerTwo").value;
 
     const startGame = () => {
-        console.log(playerOne.value);
-        console.log(playerOneName);
 
         if (playerOne.value === "" || playerTwo.value === "") {
             alert("please enter player names");
@@ -109,13 +111,46 @@ const Game = (() => {
         }
 
         Gameboard.updateBoard(position, players[currentPlayerIndex].emblem);
+
+        // if (checkBoard(Gameboard.viewGameboard, players[currentPlayerIndex].emblem)) {
+        //     gameOver = true;
+        //     alert(`${players[currentPlayerIndex].name}` + " Wins!");
+        // }
+
+        if (checkBoard(Gameboard.viewGameboard)){
+            gameOver = true;
+            alert("winner winner chicken dinner")
+        }
+
         currentPlayerIndex = currentPlayerIndex === 0 ? 1:0;
+    }
+
+    const checkBoard = (board) => {
+        const winningCombos = [
+            [0,1,2],
+            [3,4,5],
+            [6,7,8],
+            [0,3,6],
+            [1,4,7],
+            [2,5,8],
+            [0,4,8],
+            [2,4,6]
+        ]
+
+        for (let i = 0; i < winningCombos.length; i++) {
+            const [a,b,c] = winningCombos[i];
+            if (board[a] && board[a] === board[b] && board[a] === board[c]){
+                return true;
+            }
+        }
+        return false;
     }
 
     return {
         startGame,
         positionSelected,
-        resetGame
+        resetGame,
+        checkBoard
     }
 })();
 
